@@ -1,7 +1,17 @@
 import { motion } from 'framer-motion';
-import { FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight, FaCopy } from 'react-icons/fa';
+import { useState } from 'react';
 
 const Hero = () => {
+  const [copied, setCopied] = useState(false);
+  const contractAddress = "rHj11mPuMVXYSeexchRY8ixfQyBQckHFqy";
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(contractAddress);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <section className="min-h-screen relative flex items-center pt-20">
       {/* Gradient Background */}
@@ -47,10 +57,41 @@ const Hero = () => {
               </span>
             </h1>
             
-            <p className="text-xl text-gray-300 font-light tracking-wide mb-12 max-w-xl">
+            <p className="text-xl text-gray-300 font-light tracking-wide mb-6 max-w-xl">
               Your best route to financial freedom on the XRP Ledger. 
               Join the revolution of decentralized finance.
             </p>
+
+            {/* Contract Address */}
+            <motion.div 
+              className="mb-12 relative group"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              <div className="flex items-center gap-4 p-4 bg-black/30 backdrop-blur-sm rounded-xl border border-xrp-light/20">
+                <div className="flex-1">
+                  <p className="text-sm text-gray-400 mb-1">Contract Address</p>
+                  <p className="font-mono text-sm text-gray-200 break-all">{contractAddress}</p>
+                </div>
+                <motion.button
+                  onClick={handleCopy}
+                  className="p-2 hover:bg-white/5 rounded-lg transition-colors relative"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <FaCopy className="text-xrp-light text-xl" />
+                  {/* Tooltip */}
+                  <span 
+                    className={`absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-black/80 text-white text-xs rounded whitespace-nowrap transition-opacity ${
+                      copied ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    Copied!
+                  </span>
+                </motion.button>
+              </div>
+            </motion.div>
 
             <div className="flex flex-wrap gap-6">
               <motion.a
